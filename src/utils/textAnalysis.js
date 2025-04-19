@@ -1,82 +1,86 @@
 /**
- * Counts the number of words in a text
- * @param {string} text - The text to analyze
- * @returns {number} - The word count
+ * Analyzes text and returns statistics including character count,
+ * word count, sentence count, paragraph count, and token count
+ * 
+ * @param {string} text - The input text to analyze
+ * @return {Object} Object containing analysis results
  */
-export function countWords(text) {
-  if (!text || !text.trim()) return 0;
+export const analyzeText = (text) => {
+  // Default values for empty text
+  if (!text || text.trim() === '') {
+    return {
+      characters: 0,
+      charactersNoSpaces: 0,
+      words: 0,
+      sentences: 0,
+      paragraphs: 0,
+      tokens: 0,
+    };
+  }
+
+  // Count characters (with spaces)
+  const characters = text.length;
   
-  // Split by whitespace and filter out empty strings
-  const words = text.trim().split(/\s+/).filter(Boolean);
-  return words.length;
-}
+  // Count characters (without spaces)
+  const charactersNoSpaces = text.replace(/\s/g, '').length;
+  
+  // Count words
+  // This regex matches continuous sequences of characters (including hyphens, apostrophes)
+  // surrounded by word boundaries or spaces
+  const words = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+  
+  // Count sentences
+  // Match for sequences ending with ., !, ? followed by a space or end of text
+  // This is a simplified approach that may not catch all edge cases
+  const sentenceRegex = /[.!?]+(?:\s|$)/g;
+  const sentences = (text.match(sentenceRegex) || []).length || 
+                    // If no matches and text has content, count as 1 sentence
+                    (text.trim().length > 0 ? 1 : 0);
+  
+  // Count paragraphs
+  // Split text by one or more line breaks and count non-empty paragraphs
+  const paragraphs = text
+    .split(/\n+/)
+    .filter(para => para.trim().length > 0)
+    .length;
+  
+  // Count tokens
+  // A simple tokenization that counts words, numbers, and punctuation as separate units
+  const tokenRegex = /\w+|\S/g;
+  const tokens = (text.match(tokenRegex) || []).length;
+  
+  return {
+    characters,
+    charactersNoSpaces,
+    words,
+    sentences,
+    paragraphs,
+    tokens,
+  };
+};
 
 /**
- * Counts the total number of characters in a text (including spaces)
- * @param {string} text - The text to analyze
- * @returns {number} - The character count
+ * Advanced text analysis helper functions for future expansion
  */
-export function countCharacters(text) {
-  if (!text) return 0;
-  return text.length;
-}
 
-/**
- * Counts the number of characters in a text, excluding spaces
- * @param {string} text - The text to analyze
- * @returns {number} - The character count without spaces
- */
-export function countCharactersWithoutSpaces(text) {
-  if (!text) return 0;
-  return text.replace(/\s+/g, '').length;
-}
+// Function to detect language (placeholder for future implementation)
+export const detectLanguage = (text) => {
+  // This would use language detection libraries or APIs
+  return 'English'; // Default return for now
+};
 
-/**
- * Counts the number of sentences or phrases in a text
- * @param {string} text - The text to analyze
- * @returns {number} - The sentence count
- */
-export function countPhrases(text) {
-  if (!text || !text.trim()) return 0;
+// Function to estimate reading time
+export const estimateReadingTime = (wordCount) => {
+  // Average reading speed: 200-250 words per minute
+  const wordsPerMinute = 225;
+  const minutes = wordCount / wordsPerMinute;
   
-  // Split by common sentence terminators and filter empty results
-  const sentences = text
-    .split(/[.!?]+/)
-    .filter(sentence => sentence.trim().length > 0);
-  
-  return sentences.length;
-}
+  return Math.ceil(minutes);
+};
 
-/**
- * Counts the number of tokens in a text
- * A token is generally a word, number, punctuation mark, or other meaningful unit
- * @param {string} text - The text to analyze
- * @returns {number} - The token count
- */
-export function countTokens(text) {
-  if (!text || !text.trim()) return 0;
-  
-  // This is a simplified tokenization approach
-  // For more advanced NLP tasks, a dedicated tokenization library would be better
-  
-  // Match words, numbers, and individual punctuation
-  const tokenRegex = /\w+|[^\w\s]/g;
-  const tokens = text.match(tokenRegex);
-  
-  return tokens ? tokens.length : 0;
-}
-
-/**
- * Advanced version - estimates token count similar to how GPT models count tokens
- * Note: This is a rough approximation and not an exact match to OpenAI's tokenizer
- * @param {string} text - The text to analyze
- * @returns {number} - Estimated token count
- */
-export function estimateGptTokens(text) {
-  if (!text || !text.trim()) return 0;
-  
-  // A very rough approximation - GPT models typically use ~4 chars per token on average
-  // (This is not accurate for all languages or specialized text)
-  const averageCharsPerToken = 4;
-  return Math.ceil(text.length / averageCharsPerToken);
-}
+// Function for more sophisticated sentence detection
+export const countSentencesAdvanced = (text) => {
+  // This would handle edge cases like abbreviations, quotes, etc.
+  // For now, we're using the simpler implementation in the main function
+  return text.split(/[.!?]+(?:\s|$)/).filter(s => s.trim().length > 0).length;
+};
