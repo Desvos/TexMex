@@ -1,87 +1,108 @@
 import React from 'react';
-import { Card, Tooltip } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { Card, Statistic, Row, Col, Typography } from 'antd';
+import {
+  FileTextOutlined,
+  ClockCircleOutlined,
+  GlobalOutlined,
+  SplitCellsOutlined,
+  ReadOutlined,
+  FontSizeOutlined,
+  OrderedListOutlined,
+  BarcodeOutlined
+} from '@ant-design/icons';
 
-const ResultCard = ({ title, value, icon, description }) => {
+const { Title } = Typography;
+
+const ResultCard = ({ results }) => {
+  if (!results) return null;
+
   return (
-    <Card className="result-card">
-      <div className="card-content">
-        <div className="card-icon">
-          <span>{icon}</span>
-        </div>
-        <div className="card-data">
-          <div className="card-header">
-            <h3>{title}</h3>
-            <Tooltip title={description}>
-              <InfoCircleOutlined className="info-icon" />
-            </Tooltip>
-          </div>
-          <div className="card-value">{value.toLocaleString()}</div>
-        </div>
-      </div>
-    </Card>
+    <div className="result-section">
+      <Title level={4} style={{ marginTop: '24px', marginBottom: '16px' }}>Analysis Results</Title>
+      
+      <Row gutter={[16, 16]}>
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Card>
+            <Statistic 
+              title="Characters (with spaces)" 
+              value={results.characterCount} 
+              prefix={<FileTextOutlined />} 
+            />
+          </Card>
+        </Col>
+        
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Card>
+            <Statistic 
+              title="Characters (no spaces)" 
+              value={results.characterCountNoSpaces} 
+              prefix={<FontSizeOutlined />} 
+            />
+          </Card>
+        </Col>
+        
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Card>
+            <Statistic 
+              title="Words" 
+              value={results.wordCount} 
+              prefix={<SplitCellsOutlined />} 
+            />
+          </Card>
+        </Col>
+        
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Card>
+            <Statistic 
+              title="Sentences" 
+              value={results.sentenceCount} 
+              prefix={<OrderedListOutlined />} 
+            />
+          </Card>
+        </Col>
+        
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Card>
+            <Statistic 
+              title="Paragraphs" 
+              value={results.paragraphCount} 
+              prefix={<ReadOutlined />} 
+            />
+          </Card>
+        </Col>
+        
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Card>
+            <Statistic 
+              title="Estimated Tokens" 
+              value={results.tokenCount} 
+              prefix={<BarcodeOutlined />} 
+            />
+          </Card>
+        </Col>
+        
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Card>
+            <Statistic 
+              title="Reading Time" 
+              value={results.readingTime} 
+              prefix={<ClockCircleOutlined />} 
+            />
+          </Card>
+        </Col>
+        
+        <Col xs={24} sm={12} md={8} lg={6}>
+          <Card>
+            <Statistic 
+              title="Detected Language" 
+              value={results.language} 
+              prefix={<GlobalOutlined />} 
+            />
+          </Card>
+        </Col>
+      </Row>
+    </div>
   );
 };
 
 export default ResultCard;
-
-<style jsx>{`
-  .result-card {
-    height: 100%;
-    transition: transform 0.2s;
-  }
-  
-  .result-card:hover {
-    transform: translateY(-3px);
-  }
-  
-  .card-content {
-    display: flex;
-    align-items: center;
-  }
-  
-  .card-icon {
-    font-size: 2rem;
-    margin-right: 1rem;
-    opacity: 0.8;
-  }
-  
-  .card-data {
-    flex: 1;
-  }
-  
-  .card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-  }
-  
-  .card-header h3 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #666;
-  }
-  
-  .info-icon {
-    color: #999;
-    cursor: help;
-  }
-  
-  .card-value {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #1890ff;
-  }
-  
-  @media (prefers-color-scheme: dark) {
-    .card-header h3 {
-      color: #aaa;
-    }
-    
-    .info-icon {
-      color: #777;
-    }
-  }
-`}</style>

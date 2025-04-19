@@ -6,81 +6,121 @@
  * @return {Object} Object containing analysis results
  */
 export const analyzeText = (text) => {
-  // Default values for empty text
-  if (!text || text.trim() === '') {
+  if (!text || typeof text !== 'string') {
     return {
-      characters: 0,
-      charactersNoSpaces: 0,
-      words: 0,
-      sentences: 0,
-      paragraphs: 0,
-      tokens: 0,
+      characterCount: 0,
+      wordCount: 0,
+      sentenceCount: 0,
+      paragraphCount: 0,
+      tokenCount: 0,
+      readingTime: '0 min',
+      language: 'Not detected'
     };
   }
 
-  // Count characters (with spaces)
-  const characters = text.length;
+  const cleanText = text.trim();
   
-  // Count characters (without spaces)
-  const charactersNoSpaces = text.replace(/\s/g, '').length;
+  // Count characters (including spaces)
+  const characterCount = cleanText.length;
+  
+  // Count characters (excluding spaces)
+  const characterCountNoSpaces = cleanText.replace(/\s/g, '').length;
   
   // Count words
-  // This regex matches continuous sequences of characters (including hyphens, apostrophes)
-  // surrounded by word boundaries or spaces
-  const words = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+  const words = cleanText.match(/\b\w+\b/g) || [];
+  const wordCount = words.length;
   
-  // Count sentences
-  // Match for sequences ending with ., !, ? followed by a space or end of text
-  // This is a simplified approach that may not catch all edge cases
-  const sentenceRegex = /[.!?]+(?:\s|$)/g;
-  const sentences = (text.match(sentenceRegex) || []).length || 
-                    // If no matches and text has content, count as 1 sentence
-                    (text.trim().length > 0 ? 1 : 0);
+  // Count sentences (using advanced algorithm)
+  const sentenceCount = countSentencesAdvanced(cleanText);
   
   // Count paragraphs
-  // Split text by one or more line breaks and count non-empty paragraphs
-  const paragraphs = text
-    .split(/\n+/)
-    .filter(para => para.trim().length > 0)
-    .length;
+  const paragraphCount = cleanText.split(/\n\s*\n/).filter(Boolean).length || 1;
   
-  // Count tokens
-  // A simple tokenization that counts words, numbers, and punctuation as separate units
-  const tokenRegex = /\w+|\S/g;
-  const tokens = (text.match(tokenRegex) || []).length;
+  // Estimate token count (rough approximation for GPT models)
+  const tokenCount = Math.ceil(characterCount / 4);
+  
+  // Calculate estimated reading time
+  const readingTime = estimateReadingTime(wordCount);
+  
+  // Detect language (simplified)
+  const language = detectLanguage(cleanText);
   
   return {
-    characters,
-    charactersNoSpaces,
-    words,
-    sentences,
-    paragraphs,
-    tokens,
+    characterCount,
+    characterCountNoSpaces,
+    wordCount,
+    sentenceCount,
+    paragraphCount,
+    tokenCount,
+    readingTime,
+    language
   };
 };
 
 /**
- * Advanced text analysis helper functions for future expansion
+ * Basic language detection based on character frequency
+ * This is a simplified approach and not comprehensive
+ * 
+ * @param {string} text - The input text
+ * @return {string} Detected language name
  */
-
-// Function to detect language (placeholder for future implementation)
 export const detectLanguage = (text) => {
-  // This would use language detection libraries or APIs
-  return 'English'; // Default return for now
-};
-
-// Function to estimate reading time
-export const estimateReadingTime = (wordCount) => {
-  // Average reading speed: 200-250 words per minute
-  const wordsPerMinute = 225;
-  const minutes = wordCount / wordsPerMinute;
+  if (!text || text.length < 10) return 'Not enough text';
   
-  return Math.ceil(minutes);
+  // This is a very simplified language detection
+  // For real applications, use a dedicated library
+  
+  // Check for common English patterns
+  const englishPattern = /\b(the|and|is|in|to|of|a|for|with)\b/i;
+  if (englishPattern.test(text)) return 'English';
+  
+  // Check for Spanish patterns
+  const spanishPattern = /\b(el|la|los|las|es|en|y|con|para|por)\b/i;
+  if (spanishPattern.test(text)) return 'Spanish';
+  
+  // Check for French patterns
+  const frenchPattern = /\b(le|la|les|dans|et|pour|avec|sur|ce|cette)\b/i;
+  if (frenchPattern.test(text)) return 'French';
+  
+  // Check for special characters that might indicate other languages
+  if (/[а-яА-Я]/.test(text)) return 'Russian';
+  if (/[α-ωΑ-Ω]/.test(text)) return 'Greek';
+  if (/[\u3040-\u30FF]/.test(text)) return 'Japanese';
+  if (/[\u4E00-\u9FFF]/.test(text)) return 'Chinese';
+  
+  return 'Unknown';
 };
 
-// Function for more sophisticated sentence detection
+/**
+ * Estimates reading time based on word count
+ * 
+ * @param {number} wordCount - Number of words in the text
+ * @return {string} Estimated reading time as a string
+ */
+export const estimateReadingTime = (wordCount) => {
+  // Average reading speed: ~200-250 words per minute
+  const wordsPerMinute = 225;
+  const minutes = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
+  
+  if (minutes === 1) {
+    return '1 min';
+  } else {
+    return `${minutes} mins`;
+  }
+};
+
+/**
+ * More advanced sentence counting that handles various punctuation
+ * 
+ * @param {string} text - The input text
+ * @return {number} Number of sentences
+ */
 export const countSentencesAdvanced = (text) => {
-  // This would handle edge cases like abbreviations, quotes, etc.
-  // For now, we're using the simpler implementation in the main function
-  return text.split(/[.!?]+(?:\s|$)/).filter(s => s.trim().length > 0).length;
+  if (!text) return 0;
+  
+  // This regex looks for sentence endings followed by a space or end of string
+  const sentences = text.split(/[.!?]+(?=\s|$)/);
+  
+  // Filter out empty strings that might result from multiple punctuation
+  return sentences.filter(s => s.trim().length > 0).length;
 };

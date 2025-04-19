@@ -1,0 +1,44 @@
+.text-analyzer {
+  width: 100%;
+}
+
+.input-section {
+  margin-bottom: 24px;
+}
+
+.text-input {
+  font-size: 16px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.result-section {
+  margin-top: 16px;
+}
+
+.copy-alert {
+  margin-top: 16px;
+}
+
+.empty-results {
+  padding: 48px 0;
+  text-align: center;
+}
+
+@media (max-width: 576px) {
+  .action-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .action-buttons button {
+    margin-bottom: 8px;
+    width: 100%;
+  }
+}

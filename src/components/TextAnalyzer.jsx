@@ -1,104 +1,111 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Typography, Card, Row, Col, Button, Space, Alert } from 'antd';
-import { CopyOutlined, ClearOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import AnalysisResults from './AnalysisResults';
+import { Typography, Input, Button, Space, Alert, Divider } from 'antd';
+import { ClearOutlined, CopyOutlined } from '@ant-design/icons';
 import { analyzeText } from '../utils/textAnalysis';
+import ResultCard from './ResultCard';
+import './TextAnalyzer.css';
 
+const { Title, Text } = Typography;
 const { TextArea } = Input;
-const { Title } = Typography;
 
 const TextAnalyzer = () => {
   const [text, setText] = useState('');
-  const [analysis, setAnalysis] = useState({
-    characters: 0,
-    charactersNoSpaces: 0,
-    words: 0,
-    sentences: 0,
-    paragraphs: 0,
-    tokens: 0,
-  });
+  const [results, setResults] = useState(null);
   const [copied, setCopied] = useState(false);
 
+  // Analyze text whenever it changes
   useEffect(() => {
-    setAnalysis(analyzeText(text));
+    const result = analyzeText(text);
+    setResults(result);
   }, [text]);
 
+  // Handle text input change
   const handleTextChange = (e) => {
     setText(e.target.value);
+    setCopied(false);
   };
 
+  // Clear the text input
   const handleClearText = () => {
     setText('');
+    setCopied(false);
   };
 
-  const copyResults = () => {
-    // Format results as text
-    const resultsText = `Text Analysis Results:
-Characters (with spaces): ${analysis.characters}
-Characters (without spaces): ${analysis.charactersNoSpaces}
-Words: ${analysis.words}
-Sentences: ${analysis.sentences}
-Paragraphs: ${analysis.paragraphs}
-Tokens: ${analysis.tokens}`;
+  // Copy analysis results to clipboard
+  const handleCopyResults = () => {
+    if (!results) return;
 
-    navigator.clipboard.writeText(resultsText).then(
-      () => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      },
-      (err) => {
-        console.error('Could not copy text: ', err);
-      }
-    );
+    const resultText = `
+Text Analysis Results:
+---------------------
+Characters (with spaces): ${results.characterCount}
+Characters (no spaces): ${results.characterCountNoSpaces}
+Words: ${results.wordCount}
+Sentences: ${results.sentenceCount}
+Paragraphs: ${results.paragraphCount}
+Estimated Tokens: ${results.tokenCount}
+Reading Time: ${results.readingTime}
+Detected Language: ${results.language}
+    `.trim();
+
+    navigator.clipboard.writeText(resultText).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
   };
 
   return (
     <div className="text-analyzer">
-      <Card>
-        <Title level={4}>Enter your text below:</Title>
+      <div className="input-section">
+        <Title level={4}>Enter or Paste Your Text</Title>
         <TextArea
+          placeholder="Type or paste your text here to analyze..."
           value={text}
           onChange={handleTextChange}
-          placeholder="Type or paste your text here..."
-          autoSize={{ minRows: 8, maxRows: 15 }}
-          style={{ marginBottom: '20px', fontSize: '16px' }}
+          autoSize={{ minRows: 6, maxRows: 12 }}
+          className="text-input"
         />
         
-        <Space style={{ marginBottom: '20px' }}>
+        <Space className="action-buttons">
           <Button 
-            type="primary" 
             icon={<ClearOutlined />} 
             onClick={handleClearText}
+            disabled={!text}
           >
-            Clear Text
+            Clear
           </Button>
+          
           <Button 
-            type={copied ? "success" : "default"} 
+            type="primary" 
             icon={<CopyOutlined />} 
-            onClick={copyResults}
+            onClick={handleCopyResults}
+            disabled={!text}
           >
-            {copied ? "Copied!" : "Copy Results"}
+            Copy Results
           </Button>
         </Space>
-
-        {text ? (
-          <AnalysisResults analysis={analysis} />
-        ) : (
+        
+        {copied && (
           <Alert
-            message="No text to analyze"
-            description="Enter some text to see real-time analysis results."
-            type="info"
+            message="Results copied to clipboard!"
+            type="success"
             showIcon
-            icon={<InfoCircleOutlined />}
+            className="copy-alert"
           />
         )}
-      </Card>
-
-      <style jsx>{`
-        .text-analyzer {
-          width: 100%;
-        }
-      `}</style>
+      </div>
+      
+      <Divider />
+      
+      {results && results.characterCount > 0 ? (
+        <ResultCard results={results} />
+      ) : (
+        <div className="empty-results">
+          <Text type="secondary">
+            Enter some text to see analysis results
+          </Text>
+        </div>
+      )}
     </div>
   );
 };
