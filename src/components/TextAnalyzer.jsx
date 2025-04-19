@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Input, Button, Space, Alert, Divider } from 'antd';
-import { ClearOutlined, CopyOutlined } from '@ant-design/icons';
+import { 
+  ClearOutlined, 
+  CopyOutlined, 
+  FileTextOutlined, 
+  HighlightOutlined 
+} from '@ant-design/icons';
 import { analyzeText } from '../utils/textAnalysis';
 import ResultCard from './ResultCard';
 import './TextAnalyzer.css';
 
-const { Title, Text } = Typography;
+const { Title, Paragraph, Text } = Typography;
 const { TextArea } = Input;
 
 const TextAnalyzer = () => {
@@ -56,12 +61,20 @@ Reading Time: ${results.readingTime}
   return (
     <div className="text-analyzer">
       <div className="input-section">
-        <Title level={4}>Enter or Paste Your Text</Title>
+        <Title level={4} style={{ color: '#333', marginBottom: '16px' }}>
+          <HighlightOutlined style={{ marginRight: '8px', color: '#4285f4' }} />
+          Enter or Paste Your Text
+        </Title>
+        
+        <Paragraph type="secondary" style={{ marginBottom: '16px' }}>
+          Type or paste any text to instantly analyze word count, character count, sentences, paragraphs and more.
+        </Paragraph>
+        
         <TextArea
           placeholder="Type or paste your text here to analyze..."
           value={text}
           onChange={handleTextChange}
-          autoSize={{ minRows: 6, maxRows: 12 }}
+          autoSize={{ minRows: 8, maxRows: 14 }}
           className="text-input"
         />
         
@@ -79,6 +92,7 @@ Reading Time: ${results.readingTime}
             icon={<CopyOutlined />} 
             onClick={handleCopyResults}
             disabled={!text}
+            style={{ backgroundColor: '#4285f4', borderColor: '#4285f4' }}
           >
             Copy Results
           </Button>
@@ -94,14 +108,15 @@ Reading Time: ${results.readingTime}
         )}
       </div>
       
-      <Divider />
+      <Divider style={{ margin: '24px 0' }} />
       
       {results && results.characterCount > 0 ? (
         <ResultCard results={results} />
       ) : (
         <div className="empty-results">
-          <Text type="secondary">
-            Enter some text to see analysis results
+          <FileTextOutlined style={{ fontSize: '32px', color: '#d9d9d9', marginBottom: '16px' }} />
+          <Text type="secondary" style={{ display: 'block' }}>
+            Enter some text to see the analysis results
           </Text>
         </div>
       )}

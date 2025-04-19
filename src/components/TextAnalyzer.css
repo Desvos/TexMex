@@ -1,44 +1,93 @@
 .text-analyzer {
   width: 100%;
+  padding: 16px 0;
 }
 
 .input-section {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .text-input {
   font-size: 16px;
-  margin-bottom: 16px;
-  border-radius: 4px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  padding: 12px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.text-input:focus {
+  border-color: #4285f4;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
 }
 
 .action-buttons {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 16px;
+  gap: 12px;
+}
+
+.action-buttons button {
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .result-section {
-  margin-top: 16px;
+  margin-top: 24px;
 }
 
 .copy-alert {
   margin-top: 16px;
+  border-radius: 6px;
 }
 
 .empty-results {
   padding: 48px 0;
   text-align: center;
+  color: #8c8c8c;
+  font-size: 16px;
+}
+
+/* Card styles for results */
+.ant-card {
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}
+
+.ant-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.09);
+}
+
+.ant-statistic-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #595959;
+}
+
+.ant-statistic-content {
+  font-size: 20px;
+  font-weight: 600;
+  color: #262626;
 }
 
 @media (max-width: 576px) {
   .action-buttons {
     flex-direction: column;
     align-items: stretch;
+    gap: 8px;
   }
   
   .action-buttons button {
-    margin-bottom: 8px;
+    margin-bottom: 0;
     width: 100%;
   }
 }

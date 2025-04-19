@@ -5,8 +5,8 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color: rgb(255, 255, 255, 0.85);
-  background-color: #f0f2f5;
+  color: rgba(0, 0, 0, 0.85);
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -16,17 +16,14 @@
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #f0f2f5;
+  background-color: #ffffff;
 }
 
 #root {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
 }
