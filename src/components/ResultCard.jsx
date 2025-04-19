@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Statistic, Row, Col, Typography } from 'antd';
+import { Row, Col, Typography } from 'antd';
 import {
   FileTextOutlined,
   ClockCircleOutlined,
@@ -10,22 +10,65 @@ import {
   BarcodeOutlined,
   BarChartOutlined
 } from '@ant-design/icons';
+import StatCard from './StatCard';
 
 const { Title } = Typography;
 
 const ResultCard = ({ results }) => {
   if (!results) return null;
 
-  // Custom colors for different card types
-  const cardColors = {
-    characters: '#4285f4',
-    charactersNoSpace: '#34a853',
-    words: '#ea4335',
-    sentences: '#fbbc05',
-    paragraphs: '#673ab7',
-    tokens: '#ff6d00',
-    readingTime: '#2196f3'
-  };
+  // Definizione delle card di statistica
+  const statsConfig = [
+    {
+      id: 'characters',
+      title: 'Characters (with spaces)',
+      value: results.characterCount,
+      icon: <FileTextOutlined />,
+      color: '#4285f4'
+    },
+    {
+      id: 'charactersNoSpace',
+      title: 'Characters (no spaces)',
+      value: results.characterCountNoSpaces,
+      icon: <FontSizeOutlined />,
+      color: '#34a853'
+    },
+    {
+      id: 'words',
+      title: 'Words',
+      value: results.wordCount,
+      icon: <SplitCellsOutlined />,
+      color: '#ea4335'
+    },
+    {
+      id: 'sentences',
+      title: 'Sentences',
+      value: results.sentenceCount,
+      icon: <OrderedListOutlined />,
+      color: '#fbbc05'
+    },
+    {
+      id: 'paragraphs',
+      title: 'Paragraphs',
+      value: results.paragraphCount,
+      icon: <ReadOutlined />,
+      color: '#673ab7'
+    },
+    {
+      id: 'tokens',
+      title: 'Estimated Tokens',
+      value: results.tokenCount,
+      icon: <BarcodeOutlined />,
+      color: '#ff6d00'
+    },
+    {
+      id: 'readingTime',
+      title: 'Reading Time',
+      value: results.readingTime,
+      icon: <ClockCircleOutlined />,
+      color: '#2196f3'
+    }
+  ];
 
   return (
     <div className="result-section">
@@ -35,82 +78,16 @@ const ResultCard = ({ results }) => {
       </Title>
       
       <Row gutter={[24, 24]}>
-        <Col xs={24} sm={12} md={8} lg={6}>
-          <Card hoverable>
-            <Statistic 
-              title="Characters (with spaces)" 
-              value={results.characterCount} 
-              prefix={<FileTextOutlined style={{ color: cardColors.characters }} />} 
-              valueStyle={{ color: cardColors.characters }}
+        {statsConfig.map(stat => (
+          <Col key={stat.id} xs={24} sm={12} md={8} lg={6}>
+            <StatCard 
+              title={stat.title}
+              value={stat.value}
+              icon={stat.icon}
+              color={stat.color}
             />
-          </Card>
-        </Col>
-        
-        <Col xs={24} sm={12} md={8} lg={6}>
-          <Card hoverable>
-            <Statistic 
-              title="Characters (no spaces)" 
-              value={results.characterCountNoSpaces} 
-              prefix={<FontSizeOutlined style={{ color: cardColors.charactersNoSpace }} />} 
-              valueStyle={{ color: cardColors.charactersNoSpace }}
-            />
-          </Card>
-        </Col>
-        
-        <Col xs={24} sm={12} md={8} lg={6}>
-          <Card hoverable>
-            <Statistic 
-              title="Words" 
-              value={results.wordCount} 
-              prefix={<SplitCellsOutlined style={{ color: cardColors.words }} />} 
-              valueStyle={{ color: cardColors.words }}
-            />
-          </Card>
-        </Col>
-        
-        <Col xs={24} sm={12} md={8} lg={6}>
-          <Card hoverable>
-            <Statistic 
-              title="Sentences" 
-              value={results.sentenceCount} 
-              prefix={<OrderedListOutlined style={{ color: cardColors.sentences }} />} 
-              valueStyle={{ color: cardColors.sentences }}
-            />
-          </Card>
-        </Col>
-        
-        <Col xs={24} sm={12} md={8} lg={6}>
-          <Card hoverable>
-            <Statistic 
-              title="Paragraphs" 
-              value={results.paragraphCount} 
-              prefix={<ReadOutlined style={{ color: cardColors.paragraphs }} />} 
-              valueStyle={{ color: cardColors.paragraphs }}
-            />
-          </Card>
-        </Col>
-        
-        <Col xs={24} sm={12} md={8} lg={6}>
-          <Card hoverable>
-            <Statistic 
-              title="Estimated Tokens" 
-              value={results.tokenCount} 
-              prefix={<BarcodeOutlined style={{ color: cardColors.tokens }} />} 
-              valueStyle={{ color: cardColors.tokens }}
-            />
-          </Card>
-        </Col>
-        
-        <Col xs={24} sm={12} md={8} lg={6}>
-          <Card hoverable>
-            <Statistic 
-              title="Reading Time" 
-              value={results.readingTime} 
-              prefix={<ClockCircleOutlined style={{ color: cardColors.readingTime }} />} 
-              valueStyle={{ color: cardColors.readingTime }}
-            />
-          </Card>
-        </Col>
+          </Col>
+        ))}
       </Row>
     </div>
   );
