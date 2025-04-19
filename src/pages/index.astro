@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TextAnalyzer from '../components/TextAnalyzer';
+---
+
+<Layout title="Text Analyzer - Word, Character, Phrase & Token Counter">
+  <main class="container">
+    <header class="header">
+      <h1 class="title">Text Analyzer</h1>
+      <p class="description">
+        Analyze your text in real-time. Count words, characters, phrases, and tokens.
+      </p>
+    </header>
+
+    <TextAnalyzer client:load />
+
+    <footer class="footer">
+      <p>© {new Date().getFullYear()} Text Analyzer. All calculations performed client-side.</p>
+    </footer>
+  </main>
+</Layout>
+
+<style>
+  .header {
+    text-align: center;
+    margin: 2rem 0;
+  }
+
+  .title {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, #1890ff, #722ed1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .description {
+    max-width: 600px;
+    margin: 0 auto;
+    color: #666;
+    font-size: 1.1rem;
+  }
+
+  .footer {
+    margin-top: 3rem;
+    text-align: center;
+    color: #999;
+    font-size: 0.9rem;
+    padding: 1rem 0;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .description {
+      color: #aaa;
+    }
+    .footer {
+      color: #777;
+    }
+  }
+</style>
