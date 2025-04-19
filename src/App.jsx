@@ -11,7 +11,7 @@ function App() {
     <Layout className="layout">
       <Header className="header">
         <Title level={3} style={{ color: 'white', margin: '0' }}>
-          Text Analyzer
+        TexMex
         </Title>
       </Header>
       <Content className="content">
@@ -20,7 +20,7 @@ function App() {
         </Card>
       </Content>
       <Footer className="footer">
-        Text Analyzer ©{new Date().getFullYear()} Created with React and Ant Design
+        TexMex ©{new Date().getFullYear()} Created with React and Ant Design
       </Footer>
     </Layout>
   );
