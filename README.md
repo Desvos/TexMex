@@ -16,7 +16,6 @@ A client-side text analysis web application built with Astro, React, and Ant Des
 
 ## Technology Stack
 
-- [Astro](https://astro.build/) - Web framework
 - [React](https://reactjs.org/) - UI components
 - [Ant Design](https://ant.design/) - Design system and component library
 - JavaScript - Text analysis logic

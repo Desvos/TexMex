@@ -20,7 +20,7 @@ function App() {
         </Card>
       </Content>
       <Footer className="footer">
-        TexMex ©{new Date().getFullYear()} Created with React and Ant Design
+        TexMex ©{new Date().getFullYear()}
       </Footer>
     </Layout>
   );
