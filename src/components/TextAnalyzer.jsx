@@ -45,7 +45,6 @@ Sentences: ${results.sentenceCount}
 Paragraphs: ${results.paragraphCount}
 Estimated Tokens: ${results.tokenCount}
 Reading Time: ${results.readingTime}
-Detected Language: ${results.language}
     `.trim();
 
     navigator.clipboard.writeText(resultText).then(() => {

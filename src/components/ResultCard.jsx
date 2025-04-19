@@ -3,7 +3,6 @@ import { Card, Statistic, Row, Col, Typography } from 'antd';
 import {
   FileTextOutlined,
   ClockCircleOutlined,
-  GlobalOutlined,
   SplitCellsOutlined,
   ReadOutlined,
   FontSizeOutlined,
@@ -87,16 +86,6 @@ const ResultCard = ({ results }) => {
               title="Reading Time" 
               value={results.readingTime} 
               prefix={<ClockCircleOutlined />} 
-            />
-          </Card>
-        </Col>
-        
-        <Col xs={24} sm={12} md={8} lg={6}>
-          <Card>
-            <Statistic 
-              title="Detected Language" 
-              value={results.language} 
-              prefix={<GlobalOutlined />} 
             />
           </Card>
         </Col>

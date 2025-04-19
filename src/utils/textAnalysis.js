@@ -13,8 +13,7 @@ export const analyzeText = (text) => {
       sentenceCount: 0,
       paragraphCount: 0,
       tokenCount: 0,
-      readingTime: '0 min',
-      language: 'Not detected'
+      readingTime: '0 min'
     };
   }
 
@@ -33,17 +32,15 @@ export const analyzeText = (text) => {
   // Count sentences (using advanced algorithm)
   const sentenceCount = countSentencesAdvanced(cleanText);
   
-  // Count paragraphs
-  const paragraphCount = cleanText.split(/\n\s*\n/).filter(Boolean).length || 1;
+  // Count paragraphs - better paragraph detection
+  const paragraphs = cleanText.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+  const paragraphCount = paragraphs.length || 1;
   
   // Estimate token count (rough approximation for GPT models)
   const tokenCount = Math.ceil(characterCount / 4);
   
   // Calculate estimated reading time
   const readingTime = estimateReadingTime(wordCount);
-  
-  // Detect language (simplified)
-  const language = detectLanguage(cleanText);
   
   return {
     characterCount,
@@ -52,8 +49,7 @@ export const analyzeText = (text) => {
     sentenceCount,
     paragraphCount,
     tokenCount,
-    readingTime,
-    language
+    readingTime
   };
 };
 
